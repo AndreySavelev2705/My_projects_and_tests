@@ -1,10 +1,9 @@
+import com.sun.source.tree.IfTree;
+
 import java.lang.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.lang.Object;
+import java.util.concurrent.TimeUnit;
 
 public class PaymentTracker {
 
@@ -12,12 +11,14 @@ public class PaymentTracker {
 
     private ArrayList<Account> writeToFileList = new ArrayList<>();
 
+    // Конструктор класса.
     PaymentTracker(String nameOfFile) {
+
         this.nameOfFile = nameOfFile;
     }
 
     // Метод чтения из файла.
-    String readerFromFile() {
+    void readerFromFile() {
 
         String info = "";
 
@@ -26,26 +27,72 @@ public class PaymentTracker {
 
             while (((info = accountsReader.readLine())) != null) {
                 if (!info.equals("")) {
-                    splitStringForMap(info);
+                    splitString(info);
+                    System.out.println(info);
                 } else continue;
             }
 
+            System.out.println();
             writeToFile(writeToFileList);
+
 
         } catch (IOException e) {
             System.out.println("Ошибка при попытке доступа к файлу");
         }
 
-        return info;
+        System.out.println("\nВведите новые коды валют и их значения.");
+
+       while (!readerFromConsole().equals("quit")) {
+           readerFromConsole();
+       }
+    }
+
+    private String readerFromConsole() {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        String stringFromConsole = null;
+
+       try {
+           stringFromConsole = bufferedReader.readLine();
+           splitString(stringFromConsole);
+
+       } catch (IOException ioe) {
+           System.out.println("Вы ввели что-то не то.");
+       }
+
+       System.out.println("Идет обработка счета. Это займет минуту, пожалуйста дождитесь конца операции."
+                + " Это может занять около 1-ой минуты." + " Для выхода из программы введите \"quit\" ");
+
+       writeToFile(writeToFileList);
+        return stringFromConsole;
     }
 
     // Метода записи в файл
-    void writeToFile(ArrayList<Account> arrayList) {
+    private void writeToFile(ArrayList<Account> arrayList) {
 
-        for (Account acco : arrayList) {
-
-            System.out.println(acco.toString());
+        // Таймер на 60 секунд
+        try {
+            // TimeUnit.SECONDS.sleep(10); // Лучше использовать для теста программы.
+            TimeUnit.SECONDS.sleep(60);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
+        System.out.println();
+
+
+
+
+        try {
+            for (Account acco : arrayList) {
+                // Вывод счета, если значение не равно нулю.
+                if (acco.getBalance() != 0) System.out.println(acco.toString());
+                else continue;
+            }
+        } catch (NullPointerException npe) {
+            System.out.println("Валюта, которую вы пытались внести последний раз, не существует!");
+            System.exit(0);
+        }
+
 
 
         try (FileWriter fileWriter = new FileWriter(nameOfFile)) {
@@ -62,10 +109,13 @@ public class PaymentTracker {
         } catch (IOException e) {
             System.out.println("Ошибка при попытке доступа к файлу");
         }
+
     }
 
 
-    private void splitStringForMap(String stringInListForSplit) {
+    private void splitString(String stringInListForSplit) {
+
+        if (stringInListForSplit.equals("quit") == true) System.exit(0); // Условие завершения работы программы.
 
         String[] listWithStringForSplit = new String[1];
 
@@ -84,7 +134,6 @@ public class PaymentTracker {
                     String[] t = s.split(" ");
                     filter(t[0], Integer.parseInt(t[1]));
                 }
-
             }
         }
     }
