@@ -4,17 +4,18 @@ public class PaymentTreckerDemo {
 
         ThreadOfReadFromFile threadOfReadFromFile = ThreadOfReadFromFile.createAndStart("Поток чтения файла", args[0]);
 
-        ThreadOfWriteToFile threadOfWriteToFile = ThreadOfWriteToFile.createAndStart("Поток записи в файл", args[0], threadOfReadFromFile);
-
         try {
+            threadOfReadFromFile.thrd.join();
 
-            Thread.sleep(1000);
+        } catch (InterruptedException e) {
 
-        } catch (InterruptedException ie) {
-
-            ie.printStackTrace();
+            e.printStackTrace();
         }
 
-        ThreadOfReadFromConsole threadOfReadFromConsole = ThreadOfReadFromConsole.createAndStart("Поток чтения из консоли", args[0], threadOfWriteToFile);
+        ThreadOfOutputOnConsole threadOfOutputOnConsole = ThreadOfOutputOnConsole.createAndStart("Поток вывода на косоль", threadOfReadFromFile);
+
+        while (true) {
+            ReadFromConsole.readFromConsole();
+        }
     }
 }

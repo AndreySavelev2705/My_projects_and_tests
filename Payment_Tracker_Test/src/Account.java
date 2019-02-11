@@ -1,13 +1,11 @@
-import java.io.Serializable;
-import java.text.DecimalFormat;
-
-public class Account implements Serializable {
+public class Account {
 
     private String currencyСode;
     private long balance;
 
     // Конструктор класса.
     public Account(String currencyСode, long balance) {
+
         setCurrencyСode(currencyСode);
         setBalance(balance);
     }
@@ -27,19 +25,20 @@ public class Account implements Serializable {
     // Возварщение значения валюты.
     public long getBalance() {
 
-        return balance / 100;
+        return balance;
     }
 
     // Установка значения валюты.
     public void setBalance(long account) {
 
-        balance += (account * 100);
+        balance += account;
     }
 
     // Конвертация в доллары по курсу по умолчанию.
     public double converter(long balance) {
+
         double exchangeRate = 66.44;
-        double result = (balance / exchangeRate) / 100;
+        double result = (balance / exchangeRate);
 
         return result;
     }

@@ -25,24 +25,18 @@ public class ThreadOfReadFromFile implements Runnable {
     }
 
     public void readFromFile() {
+
         String stringFromFile = "";
 
         try (BufferedReader bufferedReaderFromFile = new BufferedReader(new FileReader(nameOfFile))) {
-
-            PaymentTracker.writeToFileList.clear();
 
             while ((stringFromFile = bufferedReaderFromFile.readLine()) != null) {
 
                 if (!stringFromFile.equals("")) {
 
-                    PaymentTracker.splitString(stringFromFile);
+                    PaymentParser.splitString(stringFromFile);
 
                 } else continue;
-            }
-
-            for (Account accountList : PaymentTracker.writeToFileList) {
-
-                if (accountList.getBalance() != 0) System.out.println(accountList.toString());
             }
 
         } catch (IOException ioe) {
@@ -54,20 +48,12 @@ public class ThreadOfReadFromFile implements Runnable {
     @Override
     public void run() {
 
-        while (true) {
+        int count = 0;
+
+        while (count != 1) {
 
             readFromFile();
-
-            System.out.println();
-            System.out.println("Пожалуйста, введите ниже код валюты и желаемую сумму. Для выхода из программы введите \"quit\"");
-
-            try {
-                Thread.sleep(60000);
-
-            } catch (InterruptedException e) {
-
-                e.printStackTrace();
-            }
+            count++;
         }
     }
 }
