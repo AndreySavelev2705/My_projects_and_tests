@@ -3,28 +3,24 @@ import java.io.*;
 
 public class ThreadOfReadFromFile implements Runnable {
 
-    Thread thrd;
-
-    String nameOfFile;
+    private Thread thrd;
+    private String nameOfFile;
 
     // Конструктор класса потока.
     ThreadOfReadFromFile(String nameOfThread, String nameOfFile) {
-
         thrd = new Thread(this, nameOfThread);
-
         this.nameOfFile = nameOfFile;
     }
 
     // Метод создания и запуска потока.
     public static ThreadOfReadFromFile createAndStart(String nameOfThread, String nameOfFile) {
-
         ThreadOfReadFromFile threadOfReadFromFile = new ThreadOfReadFromFile(nameOfThread, nameOfFile);
         threadOfReadFromFile.thrd.start();
 
         return threadOfReadFromFile;
     }
 
-    public void readFromFile() {
+    private void readFromFile() {
 
         String stringFromFile = "";
 
@@ -33,14 +29,11 @@ public class ThreadOfReadFromFile implements Runnable {
             while ((stringFromFile = bufferedReaderFromFile.readLine()) != null) {
 
                 if (!stringFromFile.equals("")) {
-
                     PaymentParser.splitString(stringFromFile);
-
                 } else continue;
             }
 
         } catch (IOException ioe) {
-
             System.out.println("Ошибка при попытке доступа к файлу ");
         }
     }
@@ -51,7 +44,6 @@ public class ThreadOfReadFromFile implements Runnable {
         int count = 0;
 
         while (count != 1) {
-
             readFromFile();
             count++;
         }

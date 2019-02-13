@@ -11,12 +11,10 @@ public class PaymentParser {
         for (int i = 0; i < listWithStringForSplit.length; i++) {
 
             if ((listWithStringForSplit[i] != null) && (!listWithStringForSplit[i].isEmpty())) {
-
                 // Разбитие строки по символу переноса строки.
                 String[] str = listWithStringForSplit[i].split("\n");
 
                 for (String s : str) {
-
                     // Разбитие строки по символу пробела.
                     String[] text = s.split(" ");
                     addNewElement(text[0], Integer.parseInt(text[1]));
@@ -28,7 +26,6 @@ public class PaymentParser {
     private static void addNewElement(String currencyСode, int balance) {
 
         if (currencyСode.length() != 3) {
-
             System.out.println("Неверный формат валюты!");
             return;
         }
@@ -36,7 +33,6 @@ public class PaymentParser {
         for (Account accountList : PaymentTracker.getWriteToFileList()) {
 
             if (accountList.getCurrencyСode().equals(currencyСode)) {
-
                 accountList.setBalance(balance);
                 return;
             }
