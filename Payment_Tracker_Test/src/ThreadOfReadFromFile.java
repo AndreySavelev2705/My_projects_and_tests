@@ -20,7 +20,7 @@ public class ThreadOfReadFromFile implements Runnable {
         return threadOfReadFromFile;
     }
 
-    private void readFromFile() {
+    public void readFromFile() {
 
         String stringFromFile = "";
 
@@ -29,7 +29,7 @@ public class ThreadOfReadFromFile implements Runnable {
             while ((stringFromFile = bufferedReaderFromFile.readLine()) != null) {
 
                 if (!stringFromFile.equals("")) {
-                    PaymentParser.splitString(stringFromFile);
+                    PaymentTracker.addNewElement(PaymentParser.parsingTheString(stringFromFile));
                 } else continue;
             }
 
@@ -39,13 +39,5 @@ public class ThreadOfReadFromFile implements Runnable {
     }
 
     @Override
-    public void run() {
-
-        int count = 0;
-
-        while (count != 1) {
-            readFromFile();
-            count++;
-        }
-    }
+    public void run() { readFromFile(); }
 }

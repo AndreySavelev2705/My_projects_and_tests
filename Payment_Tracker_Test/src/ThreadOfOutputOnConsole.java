@@ -16,19 +16,23 @@ public class ThreadOfOutputOnConsole implements Runnable {
         return threadOfOutputOnConsole;
     }
 
-    private void outputOnConsole() {
-
+    public void outputOnConsole() {
         for (Account accountList : PaymentTracker.getWriteToFileList()) {
 
-            if (accountList.getBalance() != 0) System.out.println(accountList.toString());
+            if (accountList.getBalance() != 0 && accountList.getCurrencyСode().equals("USD"))
+                System.out.println(accountList.toString());
+            else
+            if (accountList.getBalance() != 0) System.out.println(accountList.toString() + " (USD "
+                    + String.format("%1.2f", Converter.converter(accountList.getBalance(), 66.44)) + ")");
         }
+        System.out.println();
     }
 
     @Override
     public void run() {
-
-        outputOnConsole();
-        System.out.println("\nПожалуйста, введите ниже код валюты и желаемую сумму. " +
-                "Для выхода из программы введите \"quit\" \n");
+        synchronized (new PaymentTracker()) {
+            outputOnConsole();
+            thrd.notify();
+        }
     }
 }

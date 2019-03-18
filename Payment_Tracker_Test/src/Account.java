@@ -29,22 +29,9 @@ public class Account {
         balance += account;
     }
 
-    // Конвертация в доллары по курсу по умолчанию.
-    public double converter(long balance) {
-        double exchangeRate = 66.44;
-        double result = (balance / exchangeRate);
-
-        return result;
-    }
-
     // Вывод объекта данного типа.
     @Override
     public String toString() {
-
-        if (this.getCurrencyСode().compareTo("USD") == 0) {
             return this.getCurrencyСode() + " " + this.getBalance();
-        } else
-            return this.getCurrencyСode() + " " + this.getBalance() + " (USD "
-                    + String.format("%1.2f", converter(balance)) + ")";
     }
 }
